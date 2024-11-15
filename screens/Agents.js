@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { FlatList } from 'react-native-gesture-handler'
 
-const numsCols = 3
+let numsCols = 3
 const cardWidth = Dimensions.get('window').width / numsCols - 30
 const Agents = () => {
     const [{ data, loading, error }] = useAxios('https://valorant-api.com/v1/agents'); // replace with your endpoint
@@ -11,11 +11,13 @@ const Agents = () => {
     if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
     if (error) return <Text>Error fetching data</Text>;
 
+    const agentsData = data?.data.filter(agent => agent.role != null);
+
     return (
         <View style={styles.container}>
             <FlatList
-                data={data.data}
-                keyExtractor={(item) => item.uuid}
+                data={agentsData}
+                keyExtractor={(item) => item?.uuid}
                 renderItem={({ item }) => <Card item={item} />}
                 contentContainerStyle={styles.grid}
                 numColumns={numsCols}
@@ -37,8 +39,8 @@ const Card = ({ item }) => {
                 isHovered && styles.hoveredCard,
             ]}
         >
-            <Image source={{ uri: item.displayIcon }} style={styles.image} />
-            <Text style={styles.label}>{item.displayName}</Text>
+            <Image source={{ uri: item?.displayIcon }} style={styles.image} />
+            <Text style={styles.label}>{item?.displayName}</Text>
         </Pressable>
     );
 };
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 10, height: 10 },
         shadowOpacity: 0.7,
         shadowRadius: 0,
-        transform: [{ translateX: -5 }, { translateY: -5 }],
+        transform: [{ translateX: -3 }, { translateY: -3 }],
         elevation: 5,
     },
     image: {
@@ -81,11 +83,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     label: {
-        color: '#fff',
-        fontSize: 28,
+        color: 'white',
+        textShadowColor: 'black',
+        textShadowRadius: 10,
+        fontSize: 16,
         textTransform: 'uppercase',
         fontWeight: 'bold',
-        marginVertical: 10,
+        marginVertical: 5,
     },
     agentContainer: {
         padding: 16,

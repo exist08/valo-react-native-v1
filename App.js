@@ -6,14 +6,13 @@ import Agents from './screens/Agents';
 import Maps from './screens/Maps';
 import Cards from './screens/Cards';
 import Weapons from './screens/Weapons';
-
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Agents"
+        initialRouteName="Weapons"
         screenOptions={{
           drawerStyle: {
             backgroundColor: '#1A1A1A', // dark background
