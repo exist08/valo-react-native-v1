@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, ActivityIndicator, Dimensions, Image, Modal, To
 import useAxios from 'axios-hooks';
 import { FlatList } from 'react-native-gesture-handler';
 import AnimatedIconExample from './temps/AnimatedIconExample';
+import Layout from './Layout';
 
 const numCols = 2;
 const cardWidth = Dimensions.get('window').width / numCols - 30;
 
-const Cards = () => {
+const Cards = ({navigation}) => {
   const [{ data, loading, error }] = useAxios('https://valorant-api.com/v1/playercards');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -28,6 +29,8 @@ const Cards = () => {
   if (error) return <Text>Error fetching data</Text>;
 
   return (
+    
+    <Layout navigation={navigation}>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.navTexts}>Cards</Text>
@@ -97,6 +100,7 @@ const Cards = () => {
         </TouchableOpacity>
       </Modal>
     </View>
+    </Layout>
   );
 };
 

@@ -5,9 +5,11 @@ import HomeScreen from './screens/HomeScreen';
 import Agents from './screens/Agents';
 import Maps from './screens/Maps';
 import Cards from './screens/Cards';
+import { enableScreens } from 'react-native-screens';
 import Weapons from './screens/Weapons';
-const Drawer = createDrawerNavigator();
 
+enableScreens();
+const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
@@ -29,6 +31,7 @@ export default function App() {
         <Drawer.Screen name="Maps" component={Maps} />
         <Drawer.Screen name="Cards" component={Cards} />
         <Drawer.Screen name="Weapons" component={Weapons} />
+        {/* <Drawer.Screen name="WeaponDetails" component={WeaponDetails} /> */}
         {/* Add more screens as needed */}
       </Drawer.Navigator>
     </NavigationContainer>

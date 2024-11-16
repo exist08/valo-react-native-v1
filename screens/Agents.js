@@ -2,10 +2,11 @@ import { View, Text, StyleSheet, Image, Dimensions, ActivityIndicator, Pressable
 import React, { useEffect, useState } from 'react'
 import useAxios from 'axios-hooks'
 import { FlatList } from 'react-native-gesture-handler'
+import Layout from './Layout'
 
 let numsCols = 3
 const cardWidth = Dimensions.get('window').width / numsCols - 30
-const Agents = () => {
+const Agents = ({ navigation }) => {
     const [{ data, loading, error }] = useAxios('https://valorant-api.com/v1/agents'); // replace with your endpoint
 
     if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
@@ -14,15 +15,17 @@ const Agents = () => {
     const agentsData = data?.data.filter(agent => agent.role != null);
 
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={agentsData}
-                keyExtractor={(item) => item?.uuid}
-                renderItem={({ item }) => <Card item={item} />}
-                contentContainerStyle={styles.grid}
-                numColumns={numsCols}
-            />
-        </View>
+        <Layout navigation={navigation}>
+            <View style={styles.container}>
+                <FlatList
+                    data={agentsData}
+                    keyExtractor={(item) => item?.uuid}
+                    renderItem={({ item }) => <Card item={item} />}
+                    contentContainerStyle={styles.grid}
+                    numColumns={numsCols}
+                />
+            </View>
+        </Layout>
     )
 }
 

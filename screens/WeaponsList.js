@@ -3,17 +3,19 @@ import { View, Text, StyleSheet, ActivityIndicator, Dimensions, Image, Modal, To
 import useAxios from 'axios-hooks';
 import { FlatList } from 'react-native-gesture-handler';
 import AnimatedIconExample from './temps/AnimatedIconExample';
-import Layout from './Layout';
+import { useNavigation } from '@react-navigation/native';
 
-const numCols = 2;
+const numCols = 1;
 const cardWidth = Dimensions.get('window').width / numCols - 30;
 
-const Cards = ({navigation}) => {
-  const [{ data, loading, error }] = useAxios('https://valorant-api.com/v1/maps');
+const WeaponsList = () => {
+  const [{ data, loading, error }] = useAxios('https://valorant-api.com/v1/weapons');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [listType, setListType] = useState('grid')
   const cardsData = data?.data || [];
+
+  const navigation = useNavigation();
 
   const openModal = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -29,30 +31,17 @@ const Cards = ({navigation}) => {
   if (error) return <Text>Error fetching data</Text>;
 
   return (
-    <Layout navigation={navigation}>
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.navTexts}>Maps</Text>
-        <View style={styles.toggleBtn}>
-          <Pressable onPress={() => setListType('list')}>
-            <Text style={styles.navTexts}>
-              <AnimatedIconExample name={'list'} />
-            </Text>
-          </Pressable>
-          <Pressable onPress={() => setListType('grid')}>
-            <Text style={styles.navTexts}>
-              <AnimatedIconExample name={'apps'} />
-            </Text>
-          </Pressable>
-        </View>
+        <Text style={styles.navTexts}>WeaponsList</Text>
       </View>
       <View>
         <FlatList
-        style={{height: '86%'}}
+        style={{height: '87%'}}
           data={cardsData}
           keyExtractor={(card) => card?.uuid}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => openModal(item.largeArt)}>
+            <TouchableOpacity onPress={() => navigation.navigate('WeaponDetails', { weaponId: item.uuid })}>
               <View style={styles.card}>
                 <Image source={{ uri: item?.displayIcon }} style={styles.cardImage} />
                 <Text style={styles.text}>{item?.displayName}</Text>
@@ -80,11 +69,10 @@ const Cards = ({navigation}) => {
         </TouchableOpacity>
       </Modal>
     </View>
-    </Layout>
   );
 };
 
-export default Cards;
+export default WeaponsList;
 
 const styles = StyleSheet.create({
   container: {
@@ -124,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     width: cardWidth,
-    aspectRatio: 2 / 3,
+    aspectRatio: 5/3,
     borderColor: '#ddd',
     borderRadius: 8,
     backgroundColor: '#fff',
@@ -132,10 +120,12 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: '100%',
-    aspectRatio: 1,
+    height: '80%',
+    marginBottom: 10,
+    borderWidth: 1,
     borderRadius: 8,
     overflow: 'hidden',
-    marginBottom: 10,
+    resizeMode: 'contain',
   },
   modalBackdrop: {
     flex: 1,
